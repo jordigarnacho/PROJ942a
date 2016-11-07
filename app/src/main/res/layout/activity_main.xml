@@ -60,7 +60,7 @@
                 android:layout_weight="1"/>
 
             <Button
-                android:text="Insert new face"
+                android:text="Settings"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/SettingsButton"

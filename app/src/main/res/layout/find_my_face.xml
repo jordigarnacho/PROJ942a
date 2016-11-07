@@ -6,21 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".CameraView">
 
+    <ImageButton
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="bottom|center"
+        android:id="@+id/TakePictureButton"
+        android:adjustViewBounds="true"
+        android:maxWidth="72dp"
+        android:maxHeight="72dp"
+        android:background="@drawable/appicon"
+        android:padding="20dp"/>
+
     <FrameLayout
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageButton
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_gravity="bottom|center"
-            android:id="@+id/TakePictureButton"
-            android:adjustViewBounds="true"
-            android:maxWidth="72dp"
-            android:maxHeight="72dp"
-            android:background="@drawable/appicon"
-            android:padding="20dp"/>
     </FrameLayout>
 
 </FrameLayout>
