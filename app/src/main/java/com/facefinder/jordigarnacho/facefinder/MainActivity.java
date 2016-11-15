@@ -24,6 +24,16 @@ import java.util.Date;
 import android.content.Intent;
 import android.provider.MediaStore;
 
+
+import java.io.*;
+import java.net.*;
+import java.io.*;
+import java.net.*;
+/** Le processus client se connecte au site fourni dans la commande
+ *   d'appel en premier argument et utilise le port distant 8080.
+ */
+
+
 public class MainActivity extends AppCompatActivity {
 
     String mCurrentPhotoPath;
