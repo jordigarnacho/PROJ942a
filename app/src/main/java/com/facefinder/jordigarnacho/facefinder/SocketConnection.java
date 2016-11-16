@@ -7,33 +7,34 @@ package com.facefinder.jordigarnacho.facefinder;
 import java.io.*;
 import java.net.*;
 
-
-/** Le processus client se connecte au site fourni dans la commande
- *   d'appel en premier argument et utilise le port distant 8080.
- */
 public class SocketConnection {
-    public int port = 8000;
     public Socket socket;
 
-    public SocketConnection() throws IOException {
-        this.socket = new Socket("192.168.118.102", port);
+    public void SocketConnection(int port, String serverIP) throws IOException {
+        this.socket = new Socket(serverIP, port);
     }
 
-    public BufferedReader ReadDataText() throws Exception {
-            BufferedReader data = new BufferedReader(new InputStreamReader(this.socket.getInputStream())
-
-        );
-        return data;
+    public Boolean getSocketStatus(){
+        return (this.socket.isConnected());
     }
 
-    public void SendDataText() throws Exception {
-        PrintWriter data = new PrintWriter(new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream())),
-                true);
+    public String ReadDataText() throws Exception {
+            return (this.socket.getInputStream().toString());
     }
 
     public void SendPicture(String pathPicture) throws Exception {
         String pathFile = pathPicture;
-        new FileInputStream(pathFile);
+        File file = new File(pathFile);
+        byte [] fileSize = new byte [(int)file.length()];
+        FileInputStream fileToSend = new FileInputStream(pathFile);
+        BufferedInputStream fileBufferedInputStream = new BufferedInputStream(fileToSend);
+        OutputStream fileOutputStream = this.socket.getOutputStream();
+        System.out.println("Sending " + pathFile + "(" + fileSize.length + " bytes)");
+        fileOutputStream.write(fileSize,0,fileSize.length);
+        fileOutputStream.flush();
+        System.out.println("Done.");
+        if (fileBufferedInputStream != null) fileBufferedInputStream.close();
+        if (fileOutputStream != null) fileOutputStream.close();
     }
 
     public void SocketStop() throws Exception {
