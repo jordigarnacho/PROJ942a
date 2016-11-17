@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     String mCurrentPhotoPath;
     private Camera mCamera = null;
     private CameraView mCameraView = null;
+    Camera.PictureCallback myPicture;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -56,37 +57,41 @@ public class MainActivity extends AppCompatActivity {
         Button aboutButton = (Button) findViewById(R.id.AboutButton);
 
         findFaceButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                setContentView(R.layout.find_my_face);
-                try {
-                    mCamera = Camera.open();//you can use open(int) to use different cameras
-                } catch (Exception e) {
-                }
+                                              public void onClick(View v) {
+                                                  setContentView(R.layout.find_my_face);
+                                                  try {
+                                                      mCamera = Camera.open();//you can use open(int) to use different cameras
+                                                  } catch (Exception e) {
+                                                  }
 
-                if (mCamera != null) {
-                    mCameraView = new CameraView(MainActivity.super.getApplicationContext(), mCamera);//create a SurfaceView to show camera data
-                    FrameLayout camera_view = (FrameLayout) findViewById(R.id.camera_view);
-                    camera_view.addView(mCameraView);//add the SurfaceView to the layout
-                    ImageButton takePictureButton = (ImageButton) findViewById(R.id.TakePictureButton);
-/*
-                    takePictureButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                            String imageFileName = "JPEG_" + timeStamp + "_";
-                            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                            //File image = File.createTempFile(imageFileName, ".jpg",storageDir);
+                                                  if (mCamera != null) {
+                                                      mCameraView = new CameraView(MainActivity.super.getApplicationContext(), mCamera);//create a SurfaceView to show camera data
+                                                      FrameLayout camera_view = (FrameLayout) findViewById(R.id.camera_view);
+                                                      camera_view.addView(mCameraView);//add the SurfaceView to the layout
+                                                      ImageButton takePictureButton = (ImageButton) findViewById(R.id.TakePictureButton);
 
-                            // Save a file: path for use with ACTION_VIEW intents
-                           // mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-                        }
+                                                      takePictureButton.setOnClickListener(new View.OnClickListener() {
+                                                                                               @Override
+                                                                                               public void onClick(View v) {
+                                                                                                   mCamera.takePicture(null, null, myPicture);
 
-                        }*/
+                                                                                                   String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                                                                                                   String imageFileName = "JPEG_" + timeStamp + "_";
+                                                                                                   File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                                                                                                   try {
+                                                                                                       File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+                                                                                                       mCurrentPhotoPath = "file:"+image.getAbsolutePath();
+                                                                                                   } catch (IOException e) {
+                                                                                                       e.printStackTrace();
+                                                                                                   }
+                                                                                               }
 
+                                                                                           }
+                                                      );
+                                                  }
+                                              }
+                                          });
 
-                }
-            }
-        });
 
         insertFaceButton.setOnClickListener(new OnClickListener() {
                                                 public void onClick(View v) {
@@ -101,9 +106,24 @@ public class MainActivity extends AppCompatActivity {
                                                         FrameLayout camera_view = (FrameLayout) findViewById(R.id.camera_view);
                                                         camera_view.addView(mCameraView);//add the SurfaceView to the layout
                                                         ImageButton takePictureButton2 = (ImageButton) findViewById(R.id.TakePictureButton2);
+                                                        takePictureButton2.setOnClickListener(new View.OnClickListener() {
+                                                                                                 @Override
+                                                                                                 public void onClick(View v) {
+                                                                                                     mCamera.takePicture(null, null, myPicture);
 
-                                                    /*    takePictureButton2.setOnClickListener(new OnClickListener() {
-                                                        });*/
+                                                                                                     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                                                                                                     String imageFileName = "JPEG_" + timeStamp + "_";
+                                                                                                     File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                                                                                                     try {
+                                                                                                         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+                                                                                                         mCurrentPhotoPath = "file:"+image.getAbsolutePath();
+                                                                                                     } catch (IOException e) {
+                                                                                                         e.printStackTrace();
+                                                                                                     }
+                                                                                                 }
+
+                                                                                             }
+                                                        );
                                                     }
                                                 }
                                             });
@@ -111,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 setContentView(R.layout.settings);
+
             }
         });
 

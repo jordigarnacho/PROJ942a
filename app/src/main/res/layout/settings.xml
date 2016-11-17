@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:weightSum="1">
-    <!--android:orientation="vertical"-->
 
     <LinearLayout
         android:orientation="horizontal"
@@ -17,7 +17,8 @@
             android:text="Server IP : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textIpServer" />
+            android:id="@+id/textIpServer"
+            android:textSize="30sp"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -25,13 +26,15 @@
             android:inputType="number"
             android:ems="3"
             android:id="@+id/ipServer1"
-            android:background="?attr/colorControlHighlight" />
+            android:background="?attr/colorControlHighlight"
+            android:textSize="30sp"/>
 
         <TextView
             android:text="."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textDot1" />
+            android:id="@+id/textDot1"
+            android:textSize="30sp"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -39,13 +42,15 @@
             android:inputType="number"
             android:ems="3"
             android:id="@+id/ipServer2"
-            android:background="?attr/colorControlHighlight" />
+            android:background="?attr/colorControlHighlight"
+            android:textSize="30sp"/>
 
         <TextView
             android:text="."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textDot2" />
+            android:id="@+id/textDot2"
+            android:textSize="30sp"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -53,13 +58,15 @@
             android:inputType="number"
             android:ems="3"
             android:id="@+id/ipServer3"
-            android:background="?attr/colorControlHighlight" />
+            android:background="?attr/colorControlHighlight"
+            android:textSize="30sp"/>
 
         <TextView
             android:text="."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textDot3" />
+            android:id="@+id/textDot3"
+            android:textSize="30sp"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -67,7 +74,8 @@
             android:inputType="number"
             android:ems="3"
             android:id="@+id/ipServer4"
-            android:background="?attr/colorControlHighlight" />
+            android:background="?attr/colorControlHighlight"
+            android:textSize="30sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -78,18 +86,34 @@
 
         <TextView
             android:padding="10dp"
-            android:text="Server Password : "
+            android:text="Server Port : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textPasswordServer"/>
+            android:id="@+id/textPortServer"
+            android:textSize="30sp"/>
 
         <EditText
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="3"
-            android:id="@+id/PasswordServer"
+            android:inputType="number"
+            android:ems="4"
+            android:textSize="30sp"
+            android:id="@+id/PortServer"
             android:background="?attr/colorControlHighlight" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5">
+
+
+        <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button"
+            android:layout_weight="1" />
     </LinearLayout>
 
 </LinearLayout>
