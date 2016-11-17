@@ -1,24 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="5">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.25">
+        android:layout_weight="1">
+
+
+        <ImageView
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/appsettings"
+            android:id="@+id/imageView2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:id="@+id/SettingsSpace2"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:weightSum="1">
 
         <TextView
-            android:padding="10dp"
             android:text="Server IP : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textIpServer"
-            android:textSize="30sp"/>
+            android:layout_weight="0.25"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -27,14 +58,14 @@
             android:ems="3"
             android:id="@+id/ipServer1"
             android:background="?attr/colorControlHighlight"
-            android:textSize="30sp"/>
+            android:layout_weight="0.15"/>
 
         <TextView
             android:text="."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textDot1"
-            android:textSize="30sp"/>
+            android:layout_weight="0.05"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -43,14 +74,14 @@
             android:ems="3"
             android:id="@+id/ipServer2"
             android:background="?attr/colorControlHighlight"
-            android:textSize="30sp"/>
+            android:layout_weight="0.15"/>
 
         <TextView
             android:text="."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textDot2"
-            android:textSize="30sp"/>
+            android:layout_weight="0.05"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -59,14 +90,14 @@
             android:ems="3"
             android:id="@+id/ipServer3"
             android:background="?attr/colorControlHighlight"
-            android:textSize="30sp"/>
+            android:layout_weight="0.15"/>
 
         <TextView
             android:text="."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textDot3"
-            android:textSize="30sp"/>
+            android:layout_weight="0.05"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -75,45 +106,46 @@
             android:ems="3"
             android:id="@+id/ipServer4"
             android:background="?attr/colorControlHighlight"
-            android:textSize="30sp"/>
+            android:layout_weight="0.15"/>
     </LinearLayout>
 
     <LinearLayout
+        android:padding="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.25">
+        android:layout_weight="1"
+        android:weightSum="1">
 
         <TextView
-            android:padding="10dp"
             android:text="Server Port : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textPortServer"
-            android:textSize="30sp"/>
+            android:layout_weight="0.15"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="4"
-            android:textSize="30sp"
-            android:id="@+id/PortServer"
-            android:background="?attr/colorControlHighlight" />
+            android:id="@+id/portServer"
+            android:background="?attr/colorControlHighlight"
+            android:layout_weight="0.3"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5">
+        android:layout_weight="1">
 
 
         <Button
-            android:text="Button"
+            android:text="OK"
+            android:layout_gravity="bottom|center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button"
+            android:id="@+id/validSettingsButton"
             android:layout_weight="1" />
     </LinearLayout>
-
 </LinearLayout>

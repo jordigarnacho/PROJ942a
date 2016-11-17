@@ -7,22 +7,22 @@ package com.facefinder.jordigarnacho.facefinder;
 import java.io.*;
 import java.net.*;
 
-public class SocketConnection {
+public class SocketManagement {
     public Socket socket;
 
-    public void SocketConnection(int port, String serverIP) throws IOException {
-        this.socket = new Socket(serverIP, port);
+    public SocketManagement(String serverIP,int serverPort) throws IOException {
+        this.socket = new Socket(serverIP, serverPort);
     }
 
     public Boolean getSocketStatus(){
         return (this.socket.isConnected());
     }
 
-    public String ReadDataText() throws Exception {
-            return (this.socket.getInputStream().toString());
+    public String readDataText() throws Exception {
+        return (this.socket.getInputStream().toString());
     }
 
-    public void SendPicture(String pathPicture) throws Exception {
+    public void sendPicture(String pathPicture) throws Exception {
         String pathFile = pathPicture;
         File file = new File(pathFile);
         byte [] fileSize = new byte [(int)file.length()];
@@ -37,7 +37,12 @@ public class SocketConnection {
         if (fileOutputStream != null) fileOutputStream.close();
     }
 
-    public void SocketStop() throws Exception {
+    public void socketUpdate(String serverIP, int serverPort) throws IOException {
+        this.socket.close();
+        this.socket = new Socket(serverIP, serverPort);
+    }
+
+    public void socketStop() throws IOException {
         this.socket.close();
     }
 }
