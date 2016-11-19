@@ -20,12 +20,12 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_camera"
         android:id="@+id/TakePictureButton2"
-        android:layout_weight="0.10" />
+        android:layout_weight="0.05" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.05" />
+        android:layout_weight="0.030" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -81,6 +81,19 @@
             android:background="?attr/colorControlHighlight"
             android:layout_weight="0.5"
             android:textSize="20dp"/>
+
     </LinearLayout>
+
+    <Space
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="0.030" />
+
+    <Button
+        android:text="OK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SendNewUserButton"
+        android:layout_weight="0.080" />
 
 </LinearLayout>
