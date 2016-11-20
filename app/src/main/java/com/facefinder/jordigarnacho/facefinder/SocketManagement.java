@@ -22,17 +22,13 @@ public class SocketManagement {
         return (this.socket.getInputStream().toString());
     }
 
-    public void sendPicture(String pathPicture) throws Exception {
-        String pathFile = pathPicture;
-        File file = new File(pathFile);
-        byte [] fileSize = new byte [(int)file.length()];
-        FileInputStream fileToSend = new FileInputStream(pathFile);
+    public void sendPicture(File Picture) throws Exception {
+        byte [] fileSize = new byte [(int)Picture.length()];
+        FileInputStream fileToSend = new FileInputStream(Picture);
         BufferedInputStream fileBufferedInputStream = new BufferedInputStream(fileToSend);
         OutputStream fileOutputStream = this.socket.getOutputStream();
-        System.out.println("Sending " + pathFile + "(" + fileSize.length + " bytes)");
         fileOutputStream.write(fileSize,0,fileSize.length);
         fileOutputStream.flush();
-        System.out.println("Done.");
         if (fileBufferedInputStream != null) fileBufferedInputStream.close();
         if (fileOutputStream != null) fileOutputStream.close();
     }

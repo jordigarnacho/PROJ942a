@@ -5,11 +5,13 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
@@ -40,14 +42,13 @@ public class MainActivity extends AppCompatActivity {
     private String mCurrentPhotoPath;
     private Camera mCamera = null;
     private CameraView mCameraView = null;
-    private String serverIP = "192.168.1.1";
+    public File imageFile = null;
+    private String serverIP1 = "192";
+    private String serverIP2 = "168";
+    private String serverIP3 = "118";
+    private String serverIP4 = "102";
     private int serverPort = 8000;
     private SocketManagement mySocket;
-
-    private Button findFaceButton = (Button) findViewById(R.id.FindFaceButton);
-    private Button insertMyFaceButton = (Button) findViewById(R.id.InsertFaceButton);
-    private Button settingsButton = (Button) findViewById(R.id.SettingsButton);
-    private Button aboutButton = (Button) findViewById(R.id.AboutButton);
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mainPageActions();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -76,8 +78,10 @@ public class MainActivity extends AppCompatActivity {
                 insertMyFaceActions();
                 return true;
             case R.id.menuSettingsButton:
-                insertMyFaceActions();
+                settingsActions();
                 return true;
+            case R.id.menuAboutButton:
+                aboutActions();
         }
 
         return super.onOptionsItemSelected(item);
@@ -85,6 +89,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void mainPageActions(){
         setContentView(R.layout.activity_main);
+
+        Button findFaceButton = (Button) findViewById(R.id.FindFaceButton);
+        Button insertMyFaceButton = (Button) findViewById(R.id.InsertFaceButton);
+        Button settingsButton = (Button) findViewById(R.id.SettingsButton);
+        Button aboutButton = (Button) findViewById(R.id.AboutButton);
+
         findFaceButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 insertMyFaceActions();
@@ -117,90 +127,150 @@ public class MainActivity extends AppCompatActivity {
         // et on informe l'utilisateur.
 
         // Essai d'accès à la caméra de l'appareil.
-        try {
-            mCamera = Camera.open();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        if (testPresenceCamera() != true || mCamera == null ) {
-            // Message d'information.
+        if (testPresenceCamera() != true)
+        {
             Toast.makeText(MainActivity.super.getApplicationContext(), "Votre appareil n'a pas de caméra", Toast.LENGTH_SHORT).show();
+            mainPageActions();
         }
-
-        // Si l'appareil possède de caméra, on lance le layout 'insert_my_face'
-        // afin de capturer une photo.
         else {
+            try {
+                mCamera = Camera.open();//you can use open(int) to use different cameras
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (testPresenceCamera() != true || mCamera == null) {
+                // Message d'information.
+                Toast.makeText(MainActivity.super.getApplicationContext(), "Votre appareil n'a pas de caméra", Toast.LENGTH_SHORT).show();
+                mainPageActions();
+            }
 
-            // Lancement du layout 'insert_my_face'
-            setContentView(R.layout.find_my_face);
+            // Si l'appareil possède de caméra, on lance le layout 'insert_my_face'
+            // afin de capturer une photo.
+            else {
+                imageFile = null;
 
-            // On créer une surface d'affichage du flux de la caméra.
-            mCameraView = new CameraView(MainActivity.super.getApplicationContext(), mCamera);
-            final FrameLayout camera_view = (FrameLayout) findViewById(R.id.camera_view);
-            camera_view.addView(mCameraView);
-            ImageButton takePictureButton = (ImageButton) findViewById(R.id.TakePictureButton);
+                // Lancement du layout 'insert_my_face'
+                setContentView(R.layout.find_my_face);
 
-            // Prise d'une photo.
-            takePictureButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                // On créer une surface d'affichage du flux de la caméra.
+                mCameraView = new CameraView(MainActivity.super.getApplicationContext(), mCamera);
+                final FrameLayout camera_view = (FrameLayout) findViewById(R.id.camera_view);
+                camera_view.addView(mCameraView);
+                ImageButton takePictureButton = (ImageButton) findViewById(R.id.TakePictureButton);
 
-                    Camera.PictureCallback imageFile = null;
+                // Prise d'une photo.
+                takePictureButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    // Enregistrement de la photo au format JPEG.
-                    mCamera.takePicture(null, null, imageFile);
-                    mCamera.stopPreview();
-                    if (imageFile != null) {
-                        Toast.makeText(MainActivity.super.getApplicationContext(), "La photo a été prise", Toast.LENGTH_SHORT).show();
+                        // Enregistrement de la photo au format JPEG.
+                        mCamera.takePicture(null, null, mPicture);
+                        mCamera.stopPreview();
+                        if (imageFile != null) {
+                            Toast.makeText(MainActivity.super.getApplicationContext(), "La photo a été prise", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-
-            });
+                });
+            }
         }
     }
 
     // Actions
     public void insertMyFaceActions() {
         setContentView(R.layout.insert_new_face);
-        try {
-            mCamera = Camera.open();//you can use open(int) to use different cameras
+        if (testPresenceCamera() != true)
+        {
+            Toast.makeText(MainActivity.super.getApplicationContext(), "Votre appareil n'a pas de caméra", Toast.LENGTH_SHORT).show();
+            mainPageActions();
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        else {
+            try {
+                mCamera = Camera.open();//you can use open(int) to use different cameras
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (testPresenceCamera() != true || mCamera == null) {
+                // Message d'information.
+                Toast.makeText(MainActivity.super.getApplicationContext(), "Votre appareil n'a pas de caméra", Toast.LENGTH_SHORT).show();
+                mainPageActions();
+            }
+            else {
+                imageFile = null;
+                setContentView(R.layout.insert_new_face);
+                // Prise de la photo.
+                if (mCamera != null) {
+                    mCameraView = new CameraView(MainActivity.super.getApplicationContext(), mCamera);
+                    FrameLayout camera_view = (FrameLayout) findViewById(R.id.camera_view);
+                    camera_view.addView(mCameraView);//add the SurfaceView to the layout
 
-        // Prise de la photo.
-        if (mCamera != null) {
-            mCameraView = new CameraView(MainActivity.super.getApplicationContext(), mCamera);
-            FrameLayout camera_view = (FrameLayout) findViewById(R.id.camera_view);
-            camera_view.addView(mCameraView);//add the SurfaceView to the layout
-            ImageButton takePictureButton2 = (ImageButton) findViewById(R.id.TakePictureButton2);
-            takePictureButton2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    Camera.PictureCallback imageFile = null;
+                    Button SendNewUserButton = (Button) findViewById(R.id.SendNewUserButton);
+                    ImageButton takePictureButton2 = (ImageButton) findViewById(R.id.TakePictureButton2);
 
-                    // Enregistrement de la photo au format JPEG.
-                    mCamera.takePicture(null, null, imageFile);
-                    mCamera.stopPreview();
-                    if (imageFile != null) {
-                        Toast.makeText(MainActivity.super.getApplicationContext(), "La photo a été prise", Toast.LENGTH_SHORT).show();
-                    }
+                    takePictureButton2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            // Enregistrement de la photo au format JPEG.
+                            mCamera.takePicture(null, null, mPicture);
+                            mCamera.stopPreview();
+                            if (imageFile != null) {
+                                Toast.makeText(MainActivity.super.getApplicationContext(), "La photo a été prise", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                    SendNewUserButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (imageFile == null) {
+                                Toast.makeText(MainActivity.super.getApplicationContext(), "Veuillez prendre un photo", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                            {
+                                String newUserFirstName = ((EditText) findViewById (R.id.newFaceFirstname)).getText().toString();
+                                String newUserLastName = ((EditText) findViewById (R.id.newFaceLastname)).getText().toString();
+                                File newUserPhoto = imageFile;
+
+                                Toast.makeText(MainActivity.super.getApplicationContext(), "Envoi en cours...", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+
                 }
-            });
+            }
         }
     }
 
     // Actions pour les parametres
     public void settingsActions(){
         setContentView(R.layout.settings);
+        EditText ipServer1Field  = (EditText) findViewById(R.id.ipServer1);
+        ipServer1Field.setText(serverIP1);
+        EditText ipServer2Field  = (EditText) findViewById(R.id.ipServer2);
+        ipServer2Field.setText(serverIP2);
+        EditText ipServer3Field  = (EditText) findViewById(R.id.ipServer3);
+        ipServer3Field.setText(serverIP3);
+        EditText ipServer4Field  = (EditText) findViewById(R.id.ipServer4);
+        ipServer4Field.setText(serverIP4.toString());
+        EditText portServerField  = (EditText) findViewById(R.id.portServer);
+        portServerField.setText(String.valueOf(serverPort));
+
+
         Button validSettingsButton  = (Button) findViewById(R.id.validSettingsButton);
         validSettingsButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                serverIP = findViewById (R.id.ipServer1).toString()+findViewById (R.id.ipServer2).toString()+findViewById (R.id.ipServer3).toString()+findViewById (R.id.ipServer4).toString();
-                serverPort = Integer.valueOf(findViewById (R.id.portServer).toString());
+
+                serverIP1 = ((EditText) findViewById (R.id.ipServer1)).getText().toString();
+                serverIP2 = ((EditText) findViewById (R.id.ipServer2)).getText().toString();
+                serverIP3 = ((EditText) findViewById (R.id.ipServer3)).getText().toString();
+                serverIP4 = ((EditText) findViewById (R.id.ipServer4)).getText().toString();
+                EditText portServerField  = (EditText) findViewById(R.id.portServer);
+                serverPort = Integer.parseInt(portServerField.getText().toString());
+                Toast.makeText(MainActivity.super.getApplicationContext(), "Paramètres sauvegardés", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -222,21 +292,43 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    // Création d'un nom de fichier unique
-    public File createImageFile() throws IOException {
-        // Création d'un nom d'image unique.
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
+    Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            File pictureFile = getOutputMediaFile();
+            imageFile = pictureFile;
+            if (pictureFile == null) {
+                return;
+            }
+            try {
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                fos.write(data);
+                fos.close();
+            } catch (FileNotFoundException e) {
+
+            } catch (IOException e) {
+            }
+        }
+    };
+
+    private static File getOutputMediaFile() {
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "MyCameraApp");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("MyCameraApp", "failed to create directory");
+                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+                .format(new Date());
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                + "IMG_" + timeStamp + ".jpg");
+        return mediaFile;
     }
 
     /**
