@@ -28,6 +28,7 @@ import java.io.File;
 import java.util.Date;
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
         findFaceButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                insertMyFaceActions();
+                findMyFaceActions();
             }
         });
 
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         // et on informe l'utilisateur.
 
         // Essai d'accès à la caméra de l'appareil.
+        
 
         if (testPresenceCamera() != true)
         {
@@ -149,34 +151,79 @@ public class MainActivity extends AppCompatActivity {
             // Si l'appareil possède de caméra, on lance le layout 'insert_my_face'
             // afin de capturer une photo.
             else {
+
+
                 imageFile = null;
 
                 // Lancement du layout 'insert_my_face'
                 setContentView(R.layout.find_my_face);
 
+                final ImageButton TakePictureButton = (ImageButton) findViewById(R.id.TakePictureButton);
+                final ImageButton OKButton = (ImageButton) findViewById(R.id.TakeOkPictureButton);
+                final ImageButton AgainButton = (ImageButton) findViewById(R.id.TakeAgainPictureButton);
+                TakePictureButton.setVisibility(View.VISIBLE);
+                OKButton.setVisibility(View.INVISIBLE);
+                AgainButton.setVisibility(View.INVISIBLE);
+                TakePictureButton.setEnabled(true);
+                OKButton.setEnabled(false);
+                AgainButton.setEnabled(false);
+
                 // On créer une surface d'affichage du flux de la caméra.
+
+
                 mCameraView = new CameraView(MainActivity.super.getApplicationContext(), mCamera);
                 final FrameLayout camera_view = (FrameLayout) findViewById(R.id.camera_view);
                 camera_view.addView(mCameraView);
-                ImageButton takePictureButton = (ImageButton) findViewById(R.id.TakePictureButton);
+
 
                 // Prise d'une photo.
-                takePictureButton.setOnClickListener(new View.OnClickListener() {
+                TakePictureButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         // Enregistrement de la photo au format JPEG.
+
                         mCamera.takePicture(null, null, mPicture);
                         mCamera.stopPreview();
+
                         if (imageFile != null) {
                             Toast.makeText(MainActivity.super.getApplicationContext(), "La photo a été prise", Toast.LENGTH_SHORT).show();
                         }
+
+                        TakePictureButton.setVisibility(View.INVISIBLE);
+                        OKButton.setVisibility(View.VISIBLE);
+                        AgainButton.setVisibility(View.VISIBLE);
+                        TakePictureButton.setEnabled(false);
+                        OKButton.setEnabled(true);
+                        AgainButton.setEnabled(true);
+                    }
+                });
+
+                // Prise d'une photo.
+                AgainButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+
+                        mCamera.startPreview();
+
+                        TakePictureButton.setVisibility(View.VISIBLE);
+                        OKButton.setVisibility(View.INVISIBLE);
+                        AgainButton.setVisibility(View.INVISIBLE);
+                        TakePictureButton.setEnabled(true);
+                        OKButton.setEnabled(false);
+                        AgainButton.setEnabled(false);
+                    }
+                });
+
+                OKButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        setContentView(R.layout.result_find_face);
+                        TextView userFindField = (TextView) findViewById(R.id.userFindField);
+                        userFindField.setText("Mon user");
                     }
                 });
             }
         }
     }
-
     // Actions
     public void insertMyFaceActions() {
         setContentView(R.layout.insert_new_face);
@@ -197,9 +244,11 @@ public class MainActivity extends AppCompatActivity {
                 mainPageActions();
             }
             else {
+
                 imageFile = null;
                 setContentView(R.layout.insert_new_face);
                 // Prise de la photo.
+
                 if (mCamera != null) {
                     mCameraView = new CameraView(MainActivity.super.getApplicationContext(), mCamera);
                     FrameLayout camera_view = (FrameLayout) findViewById(R.id.camera_view);
@@ -207,9 +256,10 @@ public class MainActivity extends AppCompatActivity {
 
 
                     Button SendNewUserButton = (Button) findViewById(R.id.SendNewUserButton);
-                    ImageButton takePictureButton2 = (ImageButton) findViewById(R.id.TakePictureButton2);
+                    ImageButton TakePictureButton2 = (ImageButton) findViewById(R.id.TakePictureButton2);
+                    ImageButton TakeAgainPictureButton2 = (ImageButton) findViewById(R.id.TakePictureButton2);
 
-                    takePictureButton2.setOnClickListener(new View.OnClickListener() {
+                    TakePictureButton2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
@@ -221,10 +271,17 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-
-                    SendNewUserButton.setOnClickListener(new View.OnClickListener() {
+                    TakeAgainPictureButton2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            mCamera.startPreview();
+                        }
+                    });
+
+                    SendNewUserButton.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                        public void onClick(View v) {
+
                             if (imageFile == null) {
                                 Toast.makeText(MainActivity.super.getApplicationContext(), "Veuillez prendre un photo", Toast.LENGTH_SHORT).show();
                             }

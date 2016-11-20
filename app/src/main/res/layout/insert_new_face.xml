@@ -5,32 +5,44 @@
     tools:context=".CameraView"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1.05">
 
     <FrameLayout
         android:id="@+id/camera_view"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="0dp"
         android:maxHeight="400dp"
         android:layout_weight="0.55">
     </FrameLayout>
-
-    <ImageButton
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_camera"
-        android:id="@+id/TakePictureButton2"
-        android:layout_weight="0.05" />
+        android:layout_height="0dp"
+        android:layout_weight="0.10"
+        android:weightSum="1">
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@android:drawable/ic_menu_camera"
+                android:id="@+id/TakePictureButton2"
+                android:layout_weight="0.5" />
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@android:drawable/ic_menu_revert"
+                android:id="@+id/TakeAgainPictureButton2"
+                android:layout_weight="0.5" />
+        </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.030" />
+        android:layout_height="0dp"
+        android:layout_weight="0.015" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="0.1"
         android:weightSum="1">
             <TextView
@@ -61,7 +73,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="0.1">
 
         <TextView
@@ -86,14 +98,14 @@
 
     <Space
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="0dp"
     android:layout_weight="0.030" />
 
     <Button
         android:text="OK"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:id="@+id/SendNewUserButton"
-        android:layout_weight="0.080" />
+        android:layout_weight="0.10" />
 
 </LinearLayout>

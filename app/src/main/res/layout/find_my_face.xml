@@ -27,4 +27,28 @@
         android:contentDescription="TakePictureButton"
     />
 
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom|left"
+        android:id="@+id/TakeOkPictureButton"
+        android:adjustViewBounds="true"
+        android:maxWidth="100dp"
+        android:maxHeight="100dp"
+        android:background="@drawable/appok"
+        android:padding="10dp"
+        />
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom|right"
+        android:id="@+id/TakeAgainPictureButton"
+        android:adjustViewBounds="true"
+        android:maxWidth="100dp"
+        android:maxHeight="100dp"
+        android:background="@drawable/appagain"
+        android:padding="10dp"
+        />
+
 </FrameLayout>
