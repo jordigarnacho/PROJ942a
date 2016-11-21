@@ -4,6 +4,8 @@ package com.facefinder.jordigarnacho.facefinder;
  * Created by Jordi GARNACHO on 15/11/2016.
  */
 
+import android.os.StrictMode;
+
 import java.io.*;
 import java.net.*;
 
@@ -11,6 +13,8 @@ public class SocketManagement {
     public Socket socket;
 
     public SocketManagement(String serverIP,int serverPort) throws IOException {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         this.socket = new Socket(serverIP, serverPort);
     }
 

@@ -36,7 +36,7 @@ import android.widget.Toast;
 import java.io.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.Socket;
+import java.net.*;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -45,12 +45,15 @@ public class MainActivity extends AppCompatActivity {
     private Camera mCamera = null;
     private CameraView mCameraView = null;
     public File imageFile = null;
-    private String serverIP1 = "192";
-    private String serverIP2 = "168";
-    private String serverIP3 = "118";
-    private String serverIP4 = "102";
+    public String serverIP1 = "192";
+    public String serverIP2 = "168";
+    public String serverIP3 = "118";
+    public String serverIP4 = "102";
     private int serverPort = 8000;
-    private Socket mySocket;
+    private Socket nsocket; //Network Socket
+    private InputStream nis; //Network Input Stream
+    private OutputStream nos; //Network Output Stream
+    //private SocketManagement mySocket;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -215,8 +218,14 @@ public class MainActivity extends AppCompatActivity {
                 OKButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         setContentView(R.layout.result_find_face);
+                        String myName = "My User";
+                        try {
+                            myName = receiveTextServer();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         TextView userFindField = (TextView) findViewById(R.id.userFindField);
-                        userFindField.setText("Mon user");
+                        userFindField.setText(myName);
                     }
                 });
             }
@@ -344,6 +353,49 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu myMenu) {
         getMenuInflater().inflate(R.menu.menu, myMenu);
         return true;
+    }
+
+    private String receiveTextServer() throws IOException {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        String myHost = serverIP1.toString()+"."+serverIP2.toString()+"."+serverIP3.toString()+"."+serverIP4.toString();
+        String inputLine = "";
+        Socket mySocket = new Socket(myHost, serverPort);
+
+        if (mySocket.isConnected() == true)
+        {
+            Toast.makeText(MainActivity.super.getApplicationContext(), "Connexion au serveur réussi", Toast.LENGTH_SHORT).show();
+
+            OutputStream outstream = mySocket.getOutputStream();
+            PrintWriter out = new PrintWriter(outstream, true);
+            out.println("2");
+            BufferedReader bis = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+            inputLine = bis.readLine();
+        }
+        else
+        {
+            Toast.makeText(MainActivity.super.getApplicationContext(), "La connexion au serveur a échouée", Toast.LENGTH_SHORT).show();
+        }
+        mySocket.close();
+        return inputLine;
+    }
+
+    private void sendImageToServer() throws IOException {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        String myHost = serverIP1.toString()+"."+serverIP2.toString()+"."+serverIP3.toString()+"."+serverIP4.toString();
+
+        Socket mySocket = new Socket(myHost, serverPort);
+
+        if (mySocket.isConnected() == true)
+        {
+            Toast.makeText(MainActivity.super.getApplicationContext(), "Connexion au serveur réussi", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(MainActivity.super.getApplicationContext(), "La connexion au serveur a échouée", Toast.LENGTH_SHORT).show();
+        }
+        mySocket.close();
     }
 
     Camera.PictureCallback mPicture = new Camera.PictureCallback() {

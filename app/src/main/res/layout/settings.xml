@@ -63,7 +63,7 @@
             android:id="@+id/ipServer1"
             android:background="?attr/colorControlHighlight"
             android:layout_weight="0.15"
-            android:textSize="20dp"/>
+            android:textSize="25sp"/>
 
         <TextView
             android:text="."
@@ -82,7 +82,7 @@
             android:id="@+id/ipServer2"
             android:background="?attr/colorControlHighlight"
             android:layout_weight="0.15"
-            android:textSize="20dp"/>
+            android:textSize="25sp"/>
 
         <TextView
             android:text="."
@@ -101,7 +101,7 @@
             android:id="@+id/ipServer3"
             android:background="?attr/colorControlHighlight"
             android:layout_weight="0.15"
-            android:textSize="20dp"/>
+            android:textSize="25sp"/>
 
         <TextView
             android:text="."
@@ -120,7 +120,7 @@
             android:id="@+id/ipServer4"
             android:background="?attr/colorControlHighlight"
             android:layout_weight="0.15"
-            android:textSize="20dp"/>
+            android:textSize="25sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/textPortServer"
             android:layout_weight="0.35"
-            android:textSize="20dp"/>
+            android:textSize="20sp"/>
 
         <EditText
             android:layout_width="0dp"
@@ -147,7 +147,7 @@
             android:id="@+id/portServer"
             android:background="?attr/colorControlHighlight"
             android:layout_weight="0.15"
-            android:textSize="20dp"/>
+            android:textSize="25dp"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"

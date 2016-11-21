@@ -27,14 +27,14 @@
             android:value="@integer/google_play_services_version" />
     </application>
 
-    <!-- Permission use the camera -->
+    <!-- Permission pour utiliser la caméra -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
 
-    <!-- Permission for use external storage -->
+    <!-- Permission pour autoriser l'écriture sur le disque externe -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!-- Permission for use internet -->
+    <!-- Permission pour utiliser la connexion internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
