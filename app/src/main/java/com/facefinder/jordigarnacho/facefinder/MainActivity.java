@@ -4,6 +4,7 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -33,9 +34,9 @@ import android.widget.Toast;
 
 
 import java.io.*;
-import java.net.*;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.Socket;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private String serverIP3 = "118";
     private String serverIP4 = "102";
     private int serverPort = 8000;
-    private SocketManagement mySocket;
+    private Socket mySocket;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -128,8 +129,6 @@ public class MainActivity extends AppCompatActivity {
         // et on informe l'utilisateur.
 
         // Essai d'accès à la caméra de l'appareil.
-        
-
         if (testPresenceCamera() != true)
         {
             Toast.makeText(MainActivity.super.getApplicationContext(), "Votre appareil n'a pas de caméra", Toast.LENGTH_SHORT).show();
@@ -184,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
                         // Enregistrement de la photo au format JPEG.
 
                         mCamera.takePicture(null, null, mPicture);
-                        mCamera.stopPreview();
 
                         if (imageFile != null) {
                             Toast.makeText(MainActivity.super.getApplicationContext(), "La photo a été prise", Toast.LENGTH_SHORT).show();
@@ -257,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Button SendNewUserButton = (Button) findViewById(R.id.SendNewUserButton);
                     ImageButton TakePictureButton2 = (ImageButton) findViewById(R.id.TakePictureButton2);
-                    ImageButton TakeAgainPictureButton2 = (ImageButton) findViewById(R.id.TakePictureButton2);
+                    ImageButton TakeAgainPictureButton2 = (ImageButton) findViewById(R.id.TakeAgainPictureButton2);
 
                     TakePictureButton2.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -265,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
 
                             // Enregistrement de la photo au format JPEG.
                             mCamera.takePicture(null, null, mPicture);
-                            mCamera.stopPreview();
                             if (imageFile != null) {
                                 Toast.makeText(MainActivity.super.getApplicationContext(), "La photo a été prise", Toast.LENGTH_SHORT).show();
                             }
@@ -372,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
         File mediaStorageDir = new File(
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "MyCameraApp");
+                "FaceFinderApp");
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 Log.d("MyCameraApp", "failed to create directory");
@@ -387,6 +384,7 @@ public class MainActivity extends AppCompatActivity {
                 + "IMG_" + timeStamp + ".jpg");
         return mediaFile;
     }
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -407,7 +405,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
@@ -418,14 +415,6 @@ public class MainActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-        //On stop la connection au socket si elle existe.
-        if (mySocket != null){
-            try {
-                mySocket.socketStop();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());

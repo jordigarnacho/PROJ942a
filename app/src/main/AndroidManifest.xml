@@ -30,6 +30,11 @@
     <!-- Permission use the camera -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
+
+    <!-- Permission for use external storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- Permission for use internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
