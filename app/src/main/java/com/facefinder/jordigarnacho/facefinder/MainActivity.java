@@ -1,5 +1,6 @@
 package com.facefinder.jordigarnacho.facefinder;
 
+// Importations des librairies
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -15,45 +16,47 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import android.os.Environment;
-
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.io.File;
 import java.util.Date;
 import android.content.Intent;
 import android.provider.MediaStore;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import java.io.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.*;
 
-
+// Activité principale (et unique)
 public class MainActivity extends AppCompatActivity {
 
-    private String mCurrentPhotoPath;
+    // Déclaration des variables globales de l'activité
+
+    // Variable pour l'appareil photo
     private Camera mCamera = null;
+
+    // Variable pour la gestion de l'affichage du
+    // flux vidéo de l'appareil photo
     private CameraView mCameraView = null;
+
+    // Variable pour le stockage des fichiers
+    // images (JPEG)
     public File imageFile = null;
-    public String serverIP1 = "192";
-    public String serverIP2 = "168";
-    public String serverIP3 = "118";
-    public String serverIP4 = "102";
+
+    // Variables pour la décomposition de
+    // l'adresse du serveur
+    private String serverIP1 = "192";
+    private String serverIP2 = "168";
+    private String serverIP3 = "118";
+    private String serverIP4 = "102";
+
+    // Variable pour le port du serveur
     private int serverPort = 8000;
-    private Socket nsocket; //Network Socket
-    private InputStream nis; //Network Input Stream
-    private OutputStream nos; //Network Output Stream
-    //private SocketManagement mySocket;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -62,8 +65,14 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient client;
 
     @Override
+
+    // Fonction lancée lors du lancement de l'application
+    // et de la première activité
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Execution de la fonction gérant le menu
+        // principal de l'application
         mainPageActions();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -71,60 +80,118 @@ public class MainActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    // Fonction permettant d'écouter un
+    // évènement provenant de l'appui sur
+    // un bouton du menu ajouté dans l'Action Bar
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+
+            // Cas d'un click sur le logo
+            // de l'application dans l'Action Bar
             case R.id.menuHomeButton:
+
+                // Execution de la fonction gérant le menu
+                // principal de l'application
                 mainPageActions();
                 return true;
+
+            // Cas d'un click sur Find My Face
+            // de l'application dans l'Action Bar
             case R.id.menuFindMyFaceButton:
+
+                // Execution de la fonction gérant
+                // l'interface Find My Face
                 findMyFaceActions();
                 return true;
+
+            // Cas d'un click sur Insert My Face
+            // de l'application dans l'Action Bar
             case R.id.menuInsertMyFaceButton:
+
+                // Execution de la fonction gérant
+                // l'interface Insert My Face
                 insertMyFaceActions();
                 return true;
+
+            // Cas d'un click sur Settings
+            // de l'application dans l'Action Bar
             case R.id.menuSettingsButton:
+
+                // Execution de la fonction gérant
+                // l'interface Settings
                 settingsActions();
                 return true;
+
+            // Cas d'un click sur About
+            // de l'application dans l'Action Bar
             case R.id.menuAboutButton:
+
+                // Execution de la fonction gérant
+                // l'interface Actions
                 aboutActions();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    // Fonction gérant l'interface du menu
+    // principal
     public void mainPageActions(){
+
+        // Redirection vers l'interface graphique activity_main
         setContentView(R.layout.activity_main);
 
+        // Déclaration des boutons du menu
         Button findFaceButton = (Button) findViewById(R.id.FindFaceButton);
         Button insertMyFaceButton = (Button) findViewById(R.id.InsertFaceButton);
         Button settingsButton = (Button) findViewById(R.id.SettingsButton);
         Button aboutButton = (Button) findViewById(R.id.AboutButton);
 
+        // Actions lors d'un click sur le
+        // bouton Find My Face
         findFaceButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+
+                // Execution de la fonction gérant
+                // l'interface Find My Face
                 findMyFaceActions();
             }
         });
 
+        // Actions lors d'un click sur le
+        // bouton Insert My Face
         insertMyFaceButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+
+                // Execution de la fonction gérant
+                // l'interface Insert My Face
                 insertMyFaceActions();
             }
         });
 
+        // Actions lors d'un click sur le
+        // bouton Settings
         settingsButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+
+                // Execution de la fonction gérant
+                // l'interface Settings
                 settingsActions();
             };
         });
 
+        // Actions lors d'un click sur le
+        // bouton About
         aboutButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+
+                // Execution de la fonction gérant
+                // l'interface About
                 aboutActions();
             }
         });
     }
 
+    // Fonction gérant l'interface Find My Face
     public void findMyFaceActions() {
 
         // Vérification que l'appareil possède une caméra.
@@ -171,8 +238,6 @@ public class MainActivity extends AppCompatActivity {
                 AgainButton.setEnabled(false);
 
                 // On créer une surface d'affichage du flux de la caméra.
-
-
                 mCameraView = new CameraView(MainActivity.super.getApplicationContext(), mCamera);
                 final FrameLayout camera_view = (FrameLayout) findViewById(R.id.camera_view);
                 camera_view.addView(mCameraView);
@@ -200,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                // Prise d'une photo.
+                // La photo ne convient pas
                 AgainButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
 
@@ -215,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                // La photo convient
                 OKButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         setContentView(R.layout.result_find_face);
@@ -231,9 +297,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    // Actions
+
+    // Fonction gérant l'interface Insert My Face
     public void insertMyFaceActions() {
-        setContentView(R.layout.insert_new_face);
+
+        // Vérification que l'appareil possède une caméra.
+        // Si l'appareil n'a pas de caméra, on ne lance pas le layout 'insert_my_face'
+        // et on informe l'utilisateur.
+
+        // Essai d'accès à la caméra de l'appareil.
         if (testPresenceCamera() != true)
         {
             Toast.makeText(MainActivity.super.getApplicationContext(), "Votre appareil n'a pas de caméra", Toast.LENGTH_SHORT).show();
@@ -308,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Actions pour les parametres
+    // Fonction gérant l'interface Settings
     public void settingsActions(){
         setContentView(R.layout.settings);
         EditText ipServer1Field  = (EditText) findViewById(R.id.ipServer1);
@@ -338,23 +410,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Fonction gérant l'interface About
     public void aboutActions(){
         setContentView(R.layout.about);
     }
 
-    // Test de présence d'une caméra sur l'appareil.
+    // Fonction de test de présence
+    // d'un appareil photo sur l'appareil.
     public boolean testPresenceCamera() {
         PackageManager packageManager = getPackageManager();
         return packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 
 
-    // Ajout du des boutons clikables dans l'Action Bar (menu).
+    // Fonction d'ajout du des boutons cliquables
+    // dans l'Action Bar (menu).
     public boolean onCreateOptionsMenu(Menu myMenu) {
         getMenuInflater().inflate(R.menu.menu, myMenu);
         return true;
     }
 
+    // Fonction permettant de recevoir un texte
+    // provenant du serveur
     private String receiveTextServer() throws IOException {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -380,6 +457,8 @@ public class MainActivity extends AppCompatActivity {
         return inputLine;
     }
 
+    // Fonction permettant d'envoyer une photo
+    // au serveur
     private void sendImageToServer() throws IOException {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -398,10 +477,15 @@ public class MainActivity extends AppCompatActivity {
         mySocket.close();
     }
 
+    // Fonction permettant de générer un fichier
+    // JPEG lors de la prise de photo
     Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             File pictureFile = getOutputMediaFile();
+
+            // Affectation de imageFile avec le fichier
+            // image de la photo prise
             imageFile = pictureFile;
             if (pictureFile == null) {
                 return;
@@ -417,6 +501,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    // Fonction permettant d'enregistrer
+    // une photo prise
     private static File getOutputMediaFile() {
         File mediaStorageDir = new File(
                 Environment
@@ -428,7 +514,7 @@ public class MainActivity extends AppCompatActivity {
                 return null;
             }
         }
-        // Create a media file name
+        // Creation d'un nom de fichier unique
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
                 .format(new Date());
         File mediaFile;
@@ -455,6 +541,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+
+    // Fonction exécutée au démarrage de l'application
     public void onStart() {
         super.onStart();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -464,6 +552,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+
+    // Fonction exécutée à l'arrêt de l'application
     public void onStop() {
         super.onStop();
 
