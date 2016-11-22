@@ -382,7 +382,13 @@ public class MainActivity extends AppCompatActivity {
 
     // Fonction gérant l'interface Settings
     public void settingsActions(){
+
+        // Lancement du layout 'settings'
         setContentView(R.layout.settings);
+
+        // Initialisation des champs de l'adresse IP
+        // et du port du serveur avec les derniers paramètres
+        // sauvegardés
         EditText ipServer1Field  = (EditText) findViewById(R.id.ipServer1);
         ipServer1Field.setText(serverIP1);
         EditText ipServer2Field  = (EditText) findViewById(R.id.ipServer2);
@@ -394,7 +400,8 @@ public class MainActivity extends AppCompatActivity {
         EditText portServerField  = (EditText) findViewById(R.id.portServer);
         portServerField.setText(String.valueOf(serverPort));
 
-
+        // Si click sur le bouton de validation
+        // on sauvegarde les nouveaux paramètres
         Button validSettingsButton  = (Button) findViewById(R.id.validSettingsButton);
         validSettingsButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -433,52 +440,115 @@ public class MainActivity extends AppCompatActivity {
     // Fonction permettant de recevoir un texte
     // provenant du serveur
     private String receiveTextServer() throws IOException {
+
+        // Permission pour la création d'un connection via un socket
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        // Récupération de l'adresse IP du serveur
         String myHost = serverIP1.toString()+"."+serverIP2.toString()+"."+serverIP3.toString()+"."+serverIP4.toString();
+
+        // Déclaration et initialisation de la chaine
+        // de caractère permettant de récupérer le message du serveur
         String inputLine = "";
+
+        // Création de la socket et connection
         Socket mySocket = new Socket(myHost, serverPort);
 
+        // Si la connection est réussi
         if (mySocket.isConnected() == true)
         {
+            // Message d'information
             Toast.makeText(MainActivity.super.getApplicationContext(), "Connexion au serveur réussi", Toast.LENGTH_SHORT).show();
 
+            // Déclaration du buffer de sortie du socket
             OutputStream outstream = mySocket.getOutputStream();
+
+            // Déclaration de la variable permettant d'écrire
+            // dans le buffer de sortie de la socket
             PrintWriter out = new PrintWriter(outstream, true);
+
+            // Écriture de la valeur "2" dans le buffer de sortie afin d'indiquer
+            // que l'on souhaite recevoir une réponse sous la forme de texte
             out.println("2");
+
+            // Déclaration de la variable permettant d'écrire
+            // dans le buffer de sortie de la socket
             BufferedReader bis = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+
+            // Lecture de la réponse renvoyée par le serveur
             inputLine = bis.readLine();
         }
+
+        // Si la connection échoue
         else
         {
+            // Message d'information
             Toast.makeText(MainActivity.super.getApplicationContext(), "La connexion au serveur a échouée", Toast.LENGTH_SHORT).show();
         }
+
+        // Fermeture de la connection socket
         mySocket.close();
+
+        // On retourne la valeur lue
         return inputLine;
     }
 
     // Fonction permettant d'envoyer une photo
-    // au serveur
+    // au serveur EN COURS D'IMPLEMENTATION
     private void sendImageToServer() throws IOException {
+        // Permission pour la création d'un connection via un socket
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        String myHost = serverIP1.toString()+"."+serverIP2.toString()+"."+serverIP3.toString()+"."+serverIP4.toString();
 
+        // Récupération de l'adresse IP du serveur
+        String myHost = serverIP1.toString() + "." + serverIP2.toString() + "." + serverIP3.toString() + "." + serverIP4.toString();
+
+        // Déclaration et initialisation de la chaine
+        // de caractère permettant de récupérer le message du serveur
+        String inputLine = "";
+
+        // Création de la socket et connection
         Socket mySocket = new Socket(myHost, serverPort);
 
-        if (mySocket.isConnected() == true)
-        {
+        // Si la connection est réussi
+        if (mySocket.isConnected() == true) {
+            // Message d'information
             Toast.makeText(MainActivity.super.getApplicationContext(), "Connexion au serveur réussi", Toast.LENGTH_SHORT).show();
+
+            // Déclaration du buffer de sortie du socket
+            OutputStream outstream = mySocket.getOutputStream();
+
+            // Déclaration de la variable permettant d'écrire
+            // dans le buffer de sortie de la socket
+            PrintWriter out = new PrintWriter(outstream, true);
+
+            // Écriture de la valeur "3" dans le buffer de sortie afin d'indiquer
+            // que l'on souhaite envoyer une photographie
+            out.println("3");
+
+            // Déclaration de la variable permettant d'écrire
+            // dans le buffer de sortie de la socket
+            BufferedReader bis = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+
+            // Lecture de la réponse renvoyée par le serveur
+            inputLine = bis.readLine();
         }
-        else
-        {
+
+        // Si la connection échoue
+        else {
+            // Message d'information
             Toast.makeText(MainActivity.super.getApplicationContext(), "La connexion au serveur a échouée", Toast.LENGTH_SHORT).show();
         }
+
+        // Fermeture de la connection socket
         mySocket.close();
+
     }
 
     // Fonction permettant de générer un fichier
-    // JPEG lors de la prise de photo
+    // JPEG lors de la prise de photo et de
+    // l'enregistrer
     Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
@@ -491,6 +561,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             try {
+                // Enregistrement de la photo
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
@@ -501,8 +572,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // Fonction permettant d'enregistrer
-    // une photo prise
+    // Fonction permettant de creer un fichier
+    // pour stocker une photo prise
     private static File getOutputMediaFile() {
         File mediaStorageDir = new File(
                 Environment
