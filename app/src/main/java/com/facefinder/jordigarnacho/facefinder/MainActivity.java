@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                         setContentView(R.layout.result_find_face);
                         String myName = "My User";
                         try {
-                            myName = receiveTextServer();
+                            myName = sendImageToServer();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -357,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                     SendNewUserButton.setOnClickListener(new View.OnClickListener() {
-                       @Override
+                        @Override
                         public void onClick(View v) {
 
                             if (imageFile == null) {
@@ -437,6 +437,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /*
     // Fonction permettant de recevoir un texte
     // provenant du serveur
     private String receiveTextServer() throws IOException {
@@ -493,10 +494,11 @@ public class MainActivity extends AppCompatActivity {
         // On retourne la valeur lue
         return inputLine;
     }
+    */
 
     // Fonction permettant d'envoyer une photo
     // au serveur EN COURS D'IMPLEMENTATION
-    private void sendImageToServer() throws IOException {
+    private String sendImageToServer() throws IOException {
         // Permission pour la création d'un connection via un socket
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -516,19 +518,20 @@ public class MainActivity extends AppCompatActivity {
             // Message d'information
             Toast.makeText(MainActivity.super.getApplicationContext(), "Connexion au serveur réussi", Toast.LENGTH_SHORT).show();
 
-            // Déclaration du buffer de sortie du socket
-            OutputStream outstream = mySocket.getOutputStream();
+            byte buf[] = new byte[1024];
+            InputStream in = new FileInputStream(imageFile);
+            OutputStream out = mySocket.getOutputStream();
+            int n;
+            while((n= in.read(buf))!=-1)
+            {
+                out.write(buf, 0, n);
+            }
+            in.close();
+            out.close();
 
             // Déclaration de la variable permettant d'écrire
             // dans le buffer de sortie de la socket
-            PrintWriter out = new PrintWriter(outstream, true);
 
-            // Écriture de la valeur "3" dans le buffer de sortie afin d'indiquer
-            // que l'on souhaite envoyer une photographie
-            out.println("3");
-
-            // Déclaration de la variable permettant d'écrire
-            // dans le buffer de sortie de la socket
             BufferedReader bis = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
 
             // Lecture de la réponse renvoyée par le serveur
@@ -543,6 +546,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Fermeture de la connection socket
         mySocket.close();
+
+        // On retourne la valeur lue
+        return inputLine;
 
     }
 
